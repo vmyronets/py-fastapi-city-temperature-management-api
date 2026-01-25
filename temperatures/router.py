@@ -1,5 +1,5 @@
 import asyncio
-from typing import Annotated
+from typing import Annotated, Sequence
 
 import httpx
 
@@ -50,7 +50,7 @@ async def create_temperatures(
 
 @router.get(
     "/temperatures",
-    response_model=list[schemas.Temperature],
+    response_model=Sequence[schemas.Temperature],
     tags=["temperatures"],
     summary="Get all temperatures or specific temperature"
 )

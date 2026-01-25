@@ -14,7 +14,7 @@ SessionDep = Annotated[AsyncSession, Depends(get_session)]
 
 @router.post(
     "/cities",
-    response_model=schemas.CityCreate,
+    response_model=schemas.City,
     tags=["cities"],
     summary="Add a new city"
 )
@@ -48,9 +48,9 @@ async def get_city(city_id: int, db: SessionDep):
     return city
 
 
-@router.put(
+@router.patch(
     "/cities/{city_id}",
-    response_model=schemas.CityUpdate,
+    response_model=schemas.City,
     tags=["cities"],
     summary="Update specific city"
 )

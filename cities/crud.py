@@ -3,6 +3,7 @@ from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from cities import schemas, models
+from cities.models import City
 
 
 async def get_cities(db: AsyncSession) -> Sequence[models.City]:
@@ -28,15 +29,15 @@ async def create_city(
 
 async def update_city(
         db: AsyncSession, data: schemas.CityUpdate, city_id: int
-) -> models.City:
+) -> City | None:
     city_db = await get_city_by_id(db=db, city_id=city_id)
 
     if not city_db:
-        raise ValueError("City not found")
+        return None
 
     update_data = data.model_dump(exclude_unset=True)
-    for key, value in update_data.items():
-        setattr(city_db, key, value)
+    for field, value in update_data.items():
+        setattr(city_db, field, value)
 
     await db.commit()
     await db.refresh(city_db)
@@ -46,7 +47,7 @@ async def update_city(
 async def delete_city(db: AsyncSession, city_id: int) -> None:
     city_db = await get_city_by_id(db, city_id)
     if not city_db:
-        raise ValueError("City not found")
+        return None
     await db.delete(city_db)
     await db.commit()
-    return
+    return None

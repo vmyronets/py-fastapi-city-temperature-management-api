@@ -13,7 +13,8 @@ async def get_temperatures(db: AsyncSession) -> Sequence[models.Temperature]:
 
 async def get_temperatures_by_city_id(
         db: AsyncSession, city_id: int
-) -> models.Temperature | None:
-    return await db.scalar(select(models.Temperature).where(
+) -> Sequence[models.Temperature]:
+    result = await db.scalars(select(models.Temperature).where(
         models.Temperature.city_id == city_id
     ))
+    return result.all()

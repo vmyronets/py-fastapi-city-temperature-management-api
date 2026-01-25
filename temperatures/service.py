@@ -27,7 +27,7 @@ async def fetch_weather(client: httpx.AsyncClient, city: City) -> dict | None:
 
         return {
             "city_id": city.id,
-            "temperature": f"{city.name}: {data["temp_c"]}",
+            "temperature": data["temp_c"],
             "date_time": datetime.now()
         }
     except httpx.HTTPError as e:
