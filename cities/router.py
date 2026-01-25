@@ -57,6 +57,10 @@ async def get_city(city_id: int, db: SessionDep):
 async def update_city(
         city_id: int, data: schemas.CityUpdate, db: SessionDep
 ):
+    city = await crud.get_city_by_id(db=db, city_id=city_id)
+    if not city:
+        raise HTTPException(status_code=404, detail="City not found")
+
     return await crud.update_city(db=db, data=data, city_id=city_id)
 
 
@@ -66,4 +70,8 @@ async def update_city(
     summary="Delete specific city"
 )
 async def delete_city(city_id: int, db: SessionDep):
-    await crud.delete_city(db=db, city_id=city_id)
+    city = await crud.get_city_by_id(db=db, city_id=city_id)
+    if not city:
+        raise HTTPException(status_code=404, detail="City not found")
+
+    return await crud.delete_city(db=db, city_id=city_id)

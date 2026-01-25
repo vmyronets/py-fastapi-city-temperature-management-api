@@ -44,10 +44,10 @@ async def update_city(
     return city_db
 
 
-async def delete_city(db: AsyncSession, city_id: int) -> None:
+async def delete_city(db: AsyncSession, city_id: int) -> models.City | None:
     city_db = await get_city_by_id(db, city_id)
     if not city_db:
         return None
     await db.delete(city_db)
     await db.commit()
-    return None
+    return city_db
